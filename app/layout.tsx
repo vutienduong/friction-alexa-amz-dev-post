@@ -2,11 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Starter Project",
-  description: "A clean starting point for building your site.",
-  other: {
-    "codex-preview": "development",
-  },
+  title: "Friction Hunter — Notice what keeps coming back",
+  description: "An ambient AI assistant that turns small recurring annoyances into one friction worth fixing.",
   icons: {
     icon: "/favicon.svg",
     shortcut: "/favicon.svg",
@@ -19,7 +16,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="dark">
       <body className="antialiased">{children}</body>
     </html>
   );

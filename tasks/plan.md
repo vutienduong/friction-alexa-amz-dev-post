@@ -15,31 +15,31 @@ Build a one-screen Alexa+ companion that demonstrates the complete hackathon loo
 
 ### Phase 1: Foundation
 
-- [ ] Task 1: Define friction types, extraction, clustering, and impact scoring with tests.
-- [ ] Task 2: Add the D1 schema, migration, and repository functions.
+- [x] Task 1: Define friction types, extraction, clustering, and impact scoring with tests.
+- [x] Task 2: Add the D1 schema, migration, and repository functions.
 
 ### Checkpoint: Foundation
 
-- [ ] Logic tests pass and the project type-checks.
+- [x] Logic tests pass and the project type-checks.
 
 ### Phase 2: Core loop
 
-- [ ] Task 3: Add history, logging, recommendation, resolution, and progress API operations.
-- [ ] Task 4: Expose the six PRD operations through the MCP endpoint.
-- [ ] Task 5: Build the Alexa simulator and live dashboard around the shared API.
+- [x] Task 3: Add history, logging, recommendation, resolution, and progress API operations.
+- [x] Task 4: Expose the six PRD operations through the MCP endpoint.
+- [x] Task 5: Build the Alexa simulator and live dashboard around the shared API.
 
 ### Checkpoint: Core loop
 
-- [ ] A user can log, detect, prioritize, resolve, and measure from one screen.
+- [x] A user can log, detect, prioritize, resolve, and measure from one screen.
 
 ### Phase 3: Product polish
 
-- [ ] Task 6: Add responsive states, keyboard support, motion, empty/error feedback, metadata, favicon, and WebMCP registration.
-- [ ] Task 7: Verify tests, migration, build, and critical browser flow.
+- [x] Task 6: Add responsive states, keyboard support, motion, empty/error feedback, metadata, favicon, and WebMCP registration.
+- [x] Task 7: Verify tests, migration, build, and critical browser flow.
 
 ### Checkpoint: Complete
 
-- [ ] All PRD MVP capabilities are represented and the app is ready for a Devpost demo.
+- [x] All PRD MVP capabilities are represented and the app is ready for a Devpost demo.
 
 ## Risks and Mitigations
 

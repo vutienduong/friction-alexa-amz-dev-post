@@ -18,6 +18,9 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
+    if (Number(request.headers.get("content-length") ?? 0) > 4_096) {
+      return Response.json({ error: "Request is too large." }, { status: 413 });
+    }
     const payload = (await request.json()) as { description?: string };
     const description = payload.description?.trim() ?? "";
     if (!description || description.length > 500) {

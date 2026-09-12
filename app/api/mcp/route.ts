@@ -95,6 +95,9 @@ function originIsAllowed(request: Request) {
 
 export async function POST(request: Request) {
   if (!originIsAllowed(request)) return rpcError(null, -32000, "Origin not allowed", 403);
+  if (Number(request.headers.get("content-length") ?? 0) > 65_536) {
+    return rpcError(null, -32600, "Request is too large", 413);
+  }
 
   let body: JsonRpcRequest;
   try {
@@ -129,12 +132,20 @@ export async function POST(request: Request) {
 
     if (name === "log_friction") {
       const description = typeof args.description === "string" ? args.description.trim() : "";
-      if (!description) return rpcError(body.id, -32602, "description is required");
+      if (!description || description.length > 500) {
+        return rpcError(body.id, -32602, "description must be between 1 and 500 characters");
+      }
       return rpc(body.id, toolResult(await logFriction(description)));
     }
     if (name === "list_frictions") {
       const status = typeof args.status === "string" ? args.status : null;
       const period = typeof args.period === "string" ? args.period : "recent";
+      if (!["today", "week", "recent"].includes(period)) {
+        return rpcError(body.id, -32602, "period must be today, week, or recent");
+      }
+      if (status && !["active", "selected_to_fix", "resolved", "ignored"].includes(status)) {
+        return rpcError(body.id, -32602, "status is invalid");
+      }
       const cutoff = new Date();
       cutoff.setHours(period === "today" ? 0 : cutoff.getHours() - (period === "week" ? 168 : 720), 0, 0, 0);
       const clusterStatus = new Map(dashboard.clusters.map((cluster) => [cluster.id, cluster.status]));
@@ -149,14 +160,16 @@ export async function POST(request: Request) {
     if (name === "resolve_friction") {
       const frictionId = typeof args.friction_id === "string" ? args.friction_id : "";
       const note = typeof args.resolution_note === "string" ? args.resolution_note : "";
-      if (!frictionId || !note) return rpcError(body.id, -32602, "friction_id and resolution_note are required");
+      if (!frictionId || frictionId.length > 100 || !note || note.length > 500) {
+        return rpcError(body.id, -32602, "friction_id and resolution_note are invalid");
+      }
       return rpc(body.id, toolResult(await resolveFriction(frictionId, note)));
     }
 
     return rpcError(body.id, -32602, "Unknown tool");
   } catch (error) {
     console.error("mcp.request.failed", error);
-    return rpcError(body.id, -32603, error instanceof Error ? error.message : "Internal error", 500);
+    return rpcError(body.id, -32603, "Internal error", 500);
   }
 }
 

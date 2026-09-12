@@ -107,20 +107,26 @@ function isoHoursAgo(hours: number) {
 
 async function ensureSeeded() {
   const db = getDb();
-  const existing = await db.select({ id: frictionClusters.id }).from(frictionClusters).limit(1);
-  if (existing.length) return;
+  const [existingCluster, existingEvent] = await Promise.all([
+    db.select({ id: frictionClusters.id }).from(frictionClusters).limit(1),
+    db.select({ id: frictionEvents.id }).from(frictionEvents).limit(1),
+  ]);
 
-  const now = new Date().toISOString();
-  await db.insert(frictionClusters).values(
-    seededClusters.map((cluster, index) => ({
-      ...cluster,
-      firstSeenAt: isoHoursAgo(100 - index),
-      lastSeenAt: isoHoursAgo(index * 4 + 3),
-    })),
-  );
+  if (!existingCluster.length) {
+    await db
+      .insert(frictionClusters)
+      .values(
+        seededClusters.map((cluster, index) => ({
+          ...cluster,
+          firstSeenAt: isoHoursAgo(100 - index),
+          lastSeenAt: isoHoursAgo(index * 4 + 3),
+        })),
+      )
+      .onConflictDoNothing();
+  }
 
-  await db.insert(frictionEvents).values(
-    seedObservations.map(([clusterId, rawText, estimatedMinutes, hoursAgo], index) => {
+  if (!existingEvent.length) {
+    const events = seedObservations.map(([clusterId, rawText, estimatedMinutes, hoursAgo], index) => {
       const cluster = seededClusters.find((item) => item.id === clusterId)!;
       return {
         id: `seed-${index + 1}`,
@@ -133,8 +139,11 @@ async function ensureSeeded() {
         clusterId,
         createdAt: isoHoursAgo(hoursAgo),
       };
-    }),
-  );
+    });
+    for (let index = 0; index < events.length; index += 8) {
+      await db.insert(frictionEvents).values(events.slice(index, index + 8)).onConflictDoNothing();
+    }
+  }
 }
 
 export async function getDashboard() {
@@ -211,7 +220,7 @@ export async function logFriction(rawText: string) {
   const impactScore = calculateImpact(related.length, totalMinutes, extracted.severity);
   await db
     .update(frictionClusters)
-    .set({ lastSeenAt: now, impactScore, status: "active", resolvedAt: null })
+    .set({ lastSeenAt: now, impactScore, status: "active", resolvedAt: null, resolutionNote: null })
     .where(eq(frictionClusters.id, clusterId));
 
   return { event, clusterId, repeated: related.length > 1, occurrences: related.length, impactScore };

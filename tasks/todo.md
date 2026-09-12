@@ -1,12 +1,12 @@
 # Friction Hunter build checklist
 
-- [ ] Core logic and tests
-- [ ] D1 schema and migration
-- [ ] Product API
-- [ ] MCP tool endpoint
-- [ ] Alexa simulator
-- [ ] Dashboard and resolution flow
-- [ ] WebMCP bridge
-- [ ] Responsive and accessibility pass
-- [ ] Test, build, and browser verification
+- [x] Core logic and tests
+- [x] D1 schema and migration
+- [x] Product API
+- [x] MCP tool endpoint
+- [x] Alexa simulator
+- [x] Dashboard and resolution flow
+- [x] WebMCP bridge
+- [x] Responsive and accessibility pass
+- [x] Test, build, and browser verification
 - [ ] Publish private preview
