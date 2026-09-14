@@ -1,0 +1,34 @@
+name: Friction Hunter for Alexa
+slug: friction-hunter-alexa
+summary: Capture recurring friction by voice, detect patterns, and focus on the fix with the highest time return.
+description: An Alexa-first ambient assistant that turns small recurring annoyances into clustered, measurable opportunities for improvement.
+why_it_exists: Small operational frustrations are easy to forget individually but expensive when they repeat without a system for capturing and prioritizing them.
+
+labs:
+  enabled: true
+  visibility: public
+  status: production
+
+category: Productivity
+tags:
+  - AI
+  - Voice
+  - Automation
+  - Alexa
+built_with:
+  - Next.js
+  - React
+  - Cloudflare D1
+  - MCP
+  - WebMCP
+related_service: AI Prototype to Production
+production_url: https://friction-hunter-alexa.duong-vu-lucifer-2.chatgpt.site/
+
+distribution:
+  facebook: off
+  x: off
+  linkedin: approval
+
+automation:
+  screenshot: true
+  ai_classification: false
